@@ -2,6 +2,7 @@
 
 pragma solidity ^0.8.20;
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/ReentrancyGuard.sol";
+import "contracts/BanklessFactory.sol";
 
 contract BanklessWallet is ReentrancyGuard {
 
@@ -10,6 +11,8 @@ contract BanklessWallet is ReentrancyGuard {
     uint256 public threshold;
 
     mapping(address => bool) public isGuardian;
+
+    BanklessFactory banklessFactory;
 
     bool public inRecovery;
 
@@ -76,6 +79,7 @@ contract BanklessWallet is ReentrancyGuard {
             guardianToRemoveTimestamp[guardianAddr[i]] = block.timestamp;
         }
         
+        banklessFactory = BanklessFactory(msg.sender);
         threshold = _threshold;
         owner = _owner;
     }
@@ -168,6 +172,8 @@ contract BanklessWallet is ReentrancyGuard {
         address _oldOwner = owner;
         owner = newOwner;
         guardianToRemoveTimestamp[msg.sender] = block.timestamp;
+
+        banklessFactory.removeOwner(_oldOwner, newOwner, msg.sender);
         emit RecoveryExecuted(_oldOwner, newOwner, currRecoveryRound);
     }
 
@@ -190,6 +196,8 @@ contract BanklessWallet is ReentrancyGuard {
         isGuardian[request.guardianToChange] = false;
         guardianChangeRequest[appellant].isUsed = true;
         inGuardianRequest = false;
+
+        banklessFactory.transferGuardian(request.guardianToChange, request.proposedGuardian, msg.sender);
         emit GuardianshipTransferExecuted(request.proposedGuardian, request.guardianToChange);
     }
 
@@ -201,6 +209,8 @@ contract BanklessWallet is ReentrancyGuard {
     function addGuardian(address newGuardian) onlyOwner notInGuardianRequest notInRecovery external {
         isGuardian[newGuardian] = true;
         guardianToRemoveTimestamp[newGuardian] = block.timestamp;
+
+        banklessFactory.addGuardian(newGuardian, msg.sender);
         emit GuardianAdded(msg.sender, newGuardian);
     }
 
@@ -220,6 +230,7 @@ contract BanklessWallet is ReentrancyGuard {
             uint256 lastGuardianCheck = guardianToRemoveTimestamp[guardianList[i]];
             if (lastGuardianCheck + AvailabilityCheckTimePeriod < block.timestamp){
                 isGuardian[guardianList[i]] = false;
+                banklessFactory.removeGuardian(guardianList[i], msg.sender);
             }
         }
 

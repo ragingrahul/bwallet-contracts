@@ -25,8 +25,10 @@ contract BanklessFactory is BanklessStorage{
         return address(uint160(uint256(hash)));
     }
 
-    function deployBanklessWallet(bytes memory bytecode, uint _salt) public payable{
+    function deployBanklessWallet( address[] memory guardianAddr, uint256 threshold, uint _salt) public payable{
         address addr;
+
+        bytes memory bytecode = getBytecode(msg.sender, guardianAddr, threshold);
 
         assembly {
             addr := create2(
@@ -42,6 +44,8 @@ contract BanklessFactory is BanklessStorage{
             }
         }
 
+        BanklessStorage.setWalletAddress(msg.sender, addr);
+        BanklessStorage.setGuardianAddress(guardianAddr, addr);
         emit BanklessWalletDeployed(addr, _salt);
     }
 

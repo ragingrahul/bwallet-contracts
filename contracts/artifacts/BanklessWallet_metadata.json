@@ -708,18 +708,34 @@
 			"bytecodeHash": "ipfs"
 		},
 		"optimizer": {
-			"enabled": false,
+			"enabled": true,
 			"runs": 200
 		},
 		"remappings": []
 	},
 	"sources": {
-		"contracts/BanklessWallet.sol": {
-			"keccak256": "0xcfc87246d41bc8095b911de828bc14416dae988d99dc6c448a9ce274e0a1add3",
+		"contracts/BanklessFactory.sol": {
+			"keccak256": "0xad3dc90383f3347711fdf9e92a6eb7d08b190eb43cbd835c5f1d40c4e19a225f",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://5d85e1299c64c1068636df4e4655a7374841342c3650e10055639923622cfe36",
-				"dweb:/ipfs/QmU7UzDrxMkJpE5Hq3w7tgvXgEG4nXiGjYnkeYibh6C4fH"
+				"bzz-raw://a8d6dd11dbd50765b6a25e671e99f0d2ebcf30f8ed66d1da9926d3e2b3a6a426",
+				"dweb:/ipfs/QmaAbsho2d2ASWbr3yAkt42fk5e6yc65KFozxUxVyMJYgZ"
+			]
+		},
+		"contracts/BanklessStorage.sol": {
+			"keccak256": "0x99e6ee1bd5abfce595c8fe6d74ed0ae352726012594882bdda6ea2b35b62e45d",
+			"license": "GPL-3.0",
+			"urls": [
+				"bzz-raw://e09d53f42ab692f5ceb0a80aed51283f5ba9a30c6a34b41e949a14e240948eea",
+				"dweb:/ipfs/QmYpCdhnhYppULxXBKSs31xX6VjRgsBmuwfSoSeEMmTtyZ"
+			]
+		},
+		"contracts/BanklessWallet.sol": {
+			"keccak256": "0xa0039c68572a8e4a61b3d9fbd0de51d8b4cfb176e1cfcdbe4db199b30e25655f",
+			"license": "GPL-3.0",
+			"urls": [
+				"bzz-raw://95ae092ec4acf008234484487d147688a7d0472593850f2dc35fa08bb2c40ff0",
+				"dweb:/ipfs/QmZ6EcFnPxF1SvhWBdbWhq12ppx3NTxF6Nu152A5jArCx2"
 			]
 		},
 		"https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/ReentrancyGuard.sol": {
