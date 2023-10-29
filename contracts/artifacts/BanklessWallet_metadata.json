@@ -8,9 +8,14 @@
 			{
 				"inputs": [
 					{
-						"internalType": "bytes32[]",
-						"name": "guardianAddrHashes",
-						"type": "bytes32[]"
+						"internalType": "address",
+						"name": "_owner",
+						"type": "address"
+					},
+					{
+						"internalType": "address[]",
+						"name": "guardianAddr",
+						"type": "address[]"
 					},
 					{
 						"internalType": "uint256",
@@ -25,25 +30,6 @@
 				"inputs": [],
 				"name": "ReentrancyGuardReentrantCall",
 				"type": "error"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "bytes32",
-						"name": "guardianHash",
-						"type": "bytes32"
-					},
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "guardianAddr",
-						"type": "address"
-					}
-				],
-				"name": "GuardianRevealed",
-				"type": "event"
 			},
 			{
 				"anonymous": false,
@@ -76,15 +62,15 @@
 				"inputs": [
 					{
 						"indexed": true,
-						"internalType": "bytes32",
+						"internalType": "address",
 						"name": "newGuardian",
-						"type": "bytes32"
+						"type": "address"
 					},
 					{
 						"indexed": false,
-						"internalType": "bytes32",
+						"internalType": "address",
 						"name": "oldGuardian",
-						"type": "bytes32"
+						"type": "address"
 					}
 				],
 				"name": "GuardianshipTransferExecuted",
@@ -95,15 +81,15 @@
 				"inputs": [
 					{
 						"indexed": true,
-						"internalType": "bytes32",
+						"internalType": "address",
 						"name": "newGuardian",
-						"type": "bytes32"
+						"type": "address"
 					},
 					{
 						"indexed": false,
-						"internalType": "bytes32",
+						"internalType": "address",
 						"name": "oldGuardian",
-						"type": "bytes32"
+						"type": "address"
 					}
 				],
 				"name": "GuardianshipTransferInitiated",
@@ -277,9 +263,9 @@
 			{
 				"inputs": [
 					{
-						"internalType": "bytes32",
+						"internalType": "address",
 						"name": "guardianHash",
-						"type": "bytes32"
+						"type": "address"
 					},
 					{
 						"internalType": "uint256",
@@ -376,14 +362,14 @@
 				"name": "guardianChangeRequest",
 				"outputs": [
 					{
-						"internalType": "bytes32",
+						"internalType": "address",
 						"name": "proposedGuardian",
-						"type": "bytes32"
+						"type": "address"
 					},
 					{
-						"internalType": "bytes32",
+						"internalType": "address",
 						"name": "guardianToChange",
-						"type": "bytes32"
+						"type": "address"
 					},
 					{
 						"internalType": "bool",
@@ -465,9 +451,9 @@
 			{
 				"inputs": [
 					{
-						"internalType": "bytes32",
+						"internalType": "address",
 						"name": "",
-						"type": "bytes32"
+						"type": "address"
 					}
 				],
 				"name": "isGuardian",
@@ -492,13 +478,6 @@
 					}
 				],
 				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "revealGuardianIdentity",
-				"outputs": [],
-				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -548,14 +527,14 @@
 			{
 				"inputs": [
 					{
-						"internalType": "bytes32",
+						"internalType": "address",
 						"name": "guardianToChange",
-						"type": "bytes32"
+						"type": "address"
 					},
 					{
-						"internalType": "bytes32",
+						"internalType": "address",
 						"name": "newGuardianHash",
-						"type": "bytes32"
+						"type": "address"
 					}
 				],
 				"name": "transferGuardianship",
@@ -599,11 +578,11 @@
 	},
 	"sources": {
 		"contracts/BanklessWallet.sol": {
-			"keccak256": "0x7e3214ef1f2be42047c80879cb47f5097def7c43e1c33bbef4994e9c1e8e59a4",
+			"keccak256": "0x9c146a2ab126cfc06e5b85956044adcd35659def6653d1aec1f951cddab80be5",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://faf7062c904d32fb2d4a2cc518cce3b3b8b88563ddca9f607142809a3d0efebc",
-				"dweb:/ipfs/QmUDCmr3v2dBHTrUe5AzA6jDZoFb1NELuM13TDvHjdi5mt"
+				"bzz-raw://525d7c6f3ab2a2da1440037f76e9a8fd487e601097a7d32735114d75feef72dc",
+				"dweb:/ipfs/QmdEWzEVtqjc3W8WHNrAcw2vQtLwy4e8whHLhxDn3BLonW"
 			]
 		},
 		"https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/ReentrancyGuard.sol": {

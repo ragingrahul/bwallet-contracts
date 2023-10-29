@@ -1,0 +1,152 @@
+{
+	"compiler": {
+		"version": "0.8.20+commit.a1b79de6"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "addr",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "salt",
+						"type": "uint256"
+					}
+				],
+				"name": "WalletDeployed",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes",
+						"name": "bytecode",
+						"type": "bytes"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_salt",
+						"type": "uint256"
+					}
+				],
+				"name": "deploy",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes",
+						"name": "bytecode",
+						"type": "bytes"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_salt",
+						"type": "uint256"
+					}
+				],
+				"name": "getAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"internalType": "address[]",
+						"name": "guardianAddr",
+						"type": "address[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "threshold",
+						"type": "uint256"
+					}
+				],
+				"name": "getBytecode",
+				"outputs": [
+					{
+						"internalType": "bytes",
+						"name": "",
+						"type": "bytes"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/BanklessFactory.sol": "BanklessFactory"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/BanklessFactory.sol": {
+			"keccak256": "0xb5b735a661de7d7b176963b5deb9b6f0ad0ca163577fc2b08329f204fd828d93",
+			"license": "GPL-3.0",
+			"urls": [
+				"bzz-raw://d2ad440528d562e81241f408ed414c2f886c752a9d551f214f4ce1a3757b63b1",
+				"dweb:/ipfs/Qmc7NZqdtURABdHA9tgP8m1dYGHUaEw7QMcVCSibrrSxqa"
+			]
+		},
+		"contracts/BanklessWallet.sol": {
+			"keccak256": "0x1e9121e9c6b95eadcfad71f6657fcc3b036689fd22cc734df7c975442fd5387f",
+			"license": "GPL-3.0",
+			"urls": [
+				"bzz-raw://eb65d9e8220ae15b82a7b47d43e6cc96691d86d8c63fda1632b2bc2aef089182",
+				"dweb:/ipfs/QmdahLDRieCCd7udEDXk7ZXXYew7LPzq5QB8kXsyBnFnBM"
+			]
+		},
+		"https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/ReentrancyGuard.sol": {
+			"keccak256": "0xf980daa263b661ab8ddee7d4fd833c7da7e7995e2c359ff1f17e67e4112f2236",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://7448ab095d6940130bcf76ba47a2eab14148c83119523b93dd89f6d84edd6c02",
+				"dweb:/ipfs/QmawrZ4voKQjH3oomXT3Kuheb3Mnmo2VvVpxg8Ne5UJUrd"
+			]
+		}
+	},
+	"version": 1
+}

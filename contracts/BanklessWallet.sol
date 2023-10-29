@@ -9,7 +9,7 @@ contract BanklessWallet is ReentrancyGuard {
 
     uint256 public threshold;
 
-    mapping(bytes32 => bool) public isGuardian;
+    mapping(address => bool) public isGuardian;
 
     bool public inRecovery;
 
@@ -26,8 +26,8 @@ contract BanklessWallet is ReentrancyGuard {
     mapping(address => RecoveryRequest) public guardianRecoveryRequest;
 
     struct GuardianRequest {
-        bytes32 proposedGuardian;
-        bytes32 guardianToChange;
+        address proposedGuardian;
+        address guardianToChange;
         bool isUsed;
     }
 
@@ -39,7 +39,7 @@ contract BanklessWallet is ReentrancyGuard {
     }
 
     modifier  onlyGuardian {
-        require(isGuardian[keccak256(abi.encodePacked(msg.sender))], "Only Guardian has access to this request");
+        require(isGuardian[msg.sender], "Only Guardian has access to this request");
         _;
     }
 
@@ -63,16 +63,16 @@ contract BanklessWallet is ReentrancyGuard {
         _;
     }
 
-    constructor(bytes32[] memory guardianAddrHashes, uint256 _threshold){
-        require(_threshold <= guardianAddrHashes.length, "Threshold is too high");
+    constructor(address _owner, address[] memory guardianAddr, uint256 _threshold){
+        require(_threshold <= guardianAddr.length, "Threshold is too high");
 
-         for(uint i = 0; i < guardianAddrHashes.length; i++) {
-            require(!isGuardian[guardianAddrHashes[i]], "Duplicate Guardian Found");
-            isGuardian[guardianAddrHashes[i]] = true;
+         for(uint i = 0; i < guardianAddr.length; i++) {
+            require(!isGuardian[guardianAddr[i]], "Duplicate Guardian Found");
+            isGuardian[guardianAddr[i]] = true;
         }
         
         threshold = _threshold;
-        owner = msg.sender;
+        owner = _owner;
     }
 
     event TransactionExecuted(address indexed callee, uint256 value, bytes data);
@@ -87,15 +87,13 @@ contract BanklessWallet is ReentrancyGuard {
 
     event RecoveryExecuted(address oldOwner, address newOwner, uint256 indexed round);
 
-    event GuardianshipTransferInitiated(bytes32 indexed newGuardian, bytes32 oldGuardian);
+    event GuardianshipTransferInitiated(address indexed newGuardian, address oldGuardian);
 
-    event GuardianshipTransferExecuted(bytes32 indexed newGuardian, bytes32 oldGuardian);
+    event GuardianshipTransferExecuted(address indexed newGuardian, address oldGuardian);
 
     event GuardianshipTransferCancelled(address by);
 
-     event GuardianshipRemovalExecuted(address by);
-
-    event GuardianRevealed(bytes32 indexed guardianHash, address indexed guardianAddr);
+    event GuardianshipRemovalExecuted(address by);
 
     function transfer(address payable destination, uint256 amount) external onlyOwner {
         destination.transfer(amount);
@@ -157,7 +155,7 @@ contract BanklessWallet is ReentrancyGuard {
         emit RecoveryExecuted(_oldOwner, newOwner, currRecoveryRound);
     }
 
-    function transferGuardianship(bytes32 guardianToChange, bytes32 newGuardianHash) onlyGuardian notInGuardianRequest notInRecovery external {
+    function transferGuardianship(address guardianToChange, address newGuardianHash) onlyGuardian notInGuardianRequest notInRecovery external {
         guardianChangeRequest[msg.sender] = GuardianRequest(
             newGuardianHash,
             guardianToChange,
@@ -173,6 +171,7 @@ contract BanklessWallet is ReentrancyGuard {
 
         isGuardian[request.proposedGuardian] = true;
         isGuardian[request.guardianToChange] = false;
+        guardianChangeRequest[appellant].isUsed = true;
         inGuardianRequest = false;
         emit GuardianshipTransferExecuted(request.proposedGuardian, request.guardianToChange);
     }
@@ -182,15 +181,11 @@ contract BanklessWallet is ReentrancyGuard {
         emit GuardianshipTransferCancelled(msg.sender);
     }
 
-    function executeGuardianRemoval(bytes32 guardianHash, uint256 _threshold) external onlyOwner {
+    function executeGuardianRemoval(address guardianHash, uint256 _threshold) external onlyOwner {
         require(isGuardian[guardianHash], "not a guardian");
 
        isGuardian[guardianHash] = false;
        threshold = _threshold;
        emit GuardianshipRemovalExecuted(msg.sender);
-    }
-
-    function revealGuardianIdentity() onlyGuardian external {
-        emit GuardianRevealed(keccak256(abi.encodePacked(msg.sender)), msg.sender);
     }
 } 
