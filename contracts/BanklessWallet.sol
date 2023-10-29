@@ -33,6 +33,10 @@ contract BanklessWallet is ReentrancyGuard {
 
     mapping(address => GuardianRequest) public guardianChangeRequest;
 
+    uint256 public AvailabilityCheckTimePeriod = 182 days;
+
+    mapping (address => uint256) public guardianToRemoveTimestamp;
+
     modifier onlyOwner {
         require(msg.sender == owner, "Not Authorized");
         _;
@@ -69,6 +73,7 @@ contract BanklessWallet is ReentrancyGuard {
          for(uint i = 0; i < guardianAddr.length; i++) {
             require(!isGuardian[guardianAddr[i]], "Duplicate Guardian Found");
             isGuardian[guardianAddr[i]] = true;
+            guardianToRemoveTimestamp[guardianAddr[i]] = block.timestamp;
         }
         
         threshold = _threshold;
@@ -93,7 +98,15 @@ contract BanklessWallet is ReentrancyGuard {
 
     event GuardianshipTransferCancelled(address by);
 
-    event GuardianshipRemovalExecuted(address by);
+    event GuardianAdded(address indexed by, address newGuardian);
+
+    event ThresholdUpdated(address indexed by, uint256 indexed newThreshold);
+
+    event GuardianAvailable(address indexed guardian);
+
+    event GuardianAvailabilityChecked(address indexed by);
+
+    event AvailabilityTimePeriodChanged(address indexed by);
 
     function transfer(address payable destination, uint256 amount) external onlyOwner {
         destination.transfer(amount);
@@ -119,6 +132,7 @@ contract BanklessWallet is ReentrancyGuard {
             false
         );
         inRecovery = true;
+        guardianToRemoveTimestamp[msg.sender] = block.timestamp;
         emit RecoveryInitiated(msg.sender, _proposedOwner, currRecoveryRound);
     }
 
@@ -128,6 +142,7 @@ contract BanklessWallet is ReentrancyGuard {
             currRecoveryRound,
             false
         );
+        guardianToRemoveTimestamp[msg.sender] = block.timestamp;
         emit RecoverySupported(msg.sender, _proposedOwner, currRecoveryRound);
     }
 
@@ -152,6 +167,7 @@ contract BanklessWallet is ReentrancyGuard {
         inRecovery = false;
         address _oldOwner = owner;
         owner = newOwner;
+        guardianToRemoveTimestamp[msg.sender] = block.timestamp;
         emit RecoveryExecuted(_oldOwner, newOwner, currRecoveryRound);
     }
 
@@ -162,6 +178,7 @@ contract BanklessWallet is ReentrancyGuard {
             false
         );
         inGuardianRequest = true;
+        guardianToRemoveTimestamp[msg.sender] = block.timestamp;
         emit GuardianshipTransferInitiated(newGuardianHash, guardianToChange);
     }
 
@@ -181,11 +198,38 @@ contract BanklessWallet is ReentrancyGuard {
         emit GuardianshipTransferCancelled(msg.sender);
     }
 
-    function executeGuardianRemoval(address guardianHash, uint256 _threshold) external onlyOwner {
-        require(isGuardian[guardianHash], "not a guardian");
+    function addGuardian(address newGuardian) onlyOwner notInGuardianRequest notInRecovery external {
+        isGuardian[newGuardian] = true;
+        guardianToRemoveTimestamp[newGuardian] = block.timestamp;
+        emit GuardianAdded(msg.sender, newGuardian);
+    }
 
-       isGuardian[guardianHash] = false;
-       threshold = _threshold;
-       emit GuardianshipRemovalExecuted(msg.sender);
+    function editThreshold(uint256 _threshold) onlyOwner notInGuardianRequest notInRecovery external {
+        require(threshold >= 1, "Threshold must be greater than 1");
+        threshold = _threshold;
+        emit ThresholdUpdated(msg.sender, _threshold);
+    }
+
+    function supportAvailability() onlyGuardian notInGuardianRequest notInRecovery external {
+        guardianToRemoveTimestamp[msg.sender] = block.timestamp;
+        emit GuardianAvailable(msg.sender);
+    }
+
+    function executeGuardianAvailabilityCheck(address[] calldata guardianList) onlyOwner notInGuardianRequest notInRecovery external {
+        for(uint i = 0 ; i < guardianList.length ; i++) {
+            uint256 lastGuardianCheck = guardianToRemoveTimestamp[guardianList[i]];
+            if (lastGuardianCheck + AvailabilityCheckTimePeriod < block.timestamp){
+                isGuardian[guardianList[i]] = false;
+            }
+        }
+
+        emit GuardianAvailabilityChecked(msg.sender);
+    }
+
+    function changeAvalabilityTimePeriod(uint256 _days) onlyOwner notInGuardianRequest notInRecovery external {
+        require(_days >= 7 , "Minimum days to execute check is 7");
+        AvailabilityCheckTimePeriod = _days * 1 days;
+
+        emit AvailabilityTimePeriodChanged(msg.sender);
     }
 } 

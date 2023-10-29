@@ -3,17 +3,18 @@
 pragma solidity ^0.8.20;
 
 import "contracts/BanklessWallet.sol";
+import "contracts/BanklessStorage.sol";
 
-contract BanklessFactory {
+contract BanklessFactory is BanklessStorage{
 
-    event WalletDeployed(address indexed addr, uint256 salt);
+    event BanklessWalletDeployed(address indexed addr, uint256 salt);
 
     function getBytecode(address owner, address[] memory guardianAddr, uint256 threshold) public pure returns(bytes memory) {
         bytes memory bytecode = type(BanklessWallet).creationCode;
         return abi.encodePacked(bytecode, abi.encode(owner, guardianAddr, threshold));
     }
 
-    function getAddress(bytes memory bytecode, uint _salt) public view returns (address) {
+    function getWalletAddress(bytes memory bytecode, uint _salt) public view returns (address) {
         bytes32 hash = keccak256(abi.encodePacked(
             bytes1(0xff),
             address(this),
@@ -24,7 +25,7 @@ contract BanklessFactory {
         return address(uint160(uint256(hash)));
     }
 
-    function deploy(bytes memory bytecode, uint _salt) public payable{
+    function deployBanklessWallet(bytes memory bytecode, uint _salt) public payable{
         address addr;
 
         assembly {
@@ -41,7 +42,7 @@ contract BanklessFactory {
             }
         }
 
-        emit WalletDeployed(addr, _salt);
+        emit BanklessWalletDeployed(addr, _salt);
     }
 
 }

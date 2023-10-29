@@ -21,7 +21,7 @@
 						"type": "uint256"
 					}
 				],
-				"name": "WalletDeployed",
+				"name": "BanklessWalletDeployed",
 				"type": "event"
 			},
 			{
@@ -37,33 +37,9 @@
 						"type": "uint256"
 					}
 				],
-				"name": "deploy",
+				"name": "deployBanklessWallet",
 				"outputs": [],
 				"stateMutability": "payable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "bytes",
-						"name": "bytecode",
-						"type": "bytes"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_salt",
-						"type": "uint256"
-					}
-				],
-				"name": "getAddress",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -93,6 +69,30 @@
 					}
 				],
 				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes",
+						"name": "bytecode",
+						"type": "bytes"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_salt",
+						"type": "uint256"
+					}
+				],
+				"name": "getWalletAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			}
 		],
@@ -124,11 +124,19 @@
 	},
 	"sources": {
 		"contracts/BanklessFactory.sol": {
-			"keccak256": "0xb5b735a661de7d7b176963b5deb9b6f0ad0ca163577fc2b08329f204fd828d93",
+			"keccak256": "0xe275a5d63ccb5adcf2e8b34ebada3da69f8527bfd27848d57c5fe2414ff29d62",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://d2ad440528d562e81241f408ed414c2f886c752a9d551f214f4ce1a3757b63b1",
-				"dweb:/ipfs/Qmc7NZqdtURABdHA9tgP8m1dYGHUaEw7QMcVCSibrrSxqa"
+				"bzz-raw://1fec896e39f7384a53a7f3b2ee3e522bbd9a422127bf9e9b11fd6e0e2761572b",
+				"dweb:/ipfs/QmPDbpNy7fBwcQWyktBmyoF5evMhhkMyr1NcgEQR8W3V5q"
+			]
+		},
+		"contracts/BanklessStorage.sol": {
+			"keccak256": "0x52b8430baed68c002fb54d11ef3f01205d7d060e6399f5f14369c9a25f0c1505",
+			"license": "GPL-3.0",
+			"urls": [
+				"bzz-raw://9d1a379a87ce9690d1c3a41cdafb6c7ccaa06f210004b2d1839122b761efcf08",
+				"dweb:/ipfs/QmV6b67htqdriAyUm5SPqV6B3S23iGn2vjyTYVAqmBsrMR"
 			]
 		},
 		"contracts/BanklessWallet.sol": {
